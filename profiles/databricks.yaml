@@ -1,9 +1,10 @@
 #
 # FIXME::REQUIRED: set an MLflow experiment name to track recipe executions and artifacts. On Databricks, an
 #                  experiment name must be a valid path in the workspace.
-#
+# In the example below, change "ascvd_ml_experiment" to the name of the experiment you have created in this path ==> /Shared/Machine_Learning_Models/DEV/
+# 
 experiment:
-  name: ""
+  name: "/Shared/Machine_Learning_Models/DEV/ascvd_ml_experiment" # Change me
 
 model_registry:
 # FIXME::OPTIONAL: Set the registry server URI, useful if you have a registry server different
@@ -12,16 +13,19 @@ model_registry:
 #   uri: "databricks://DATABRICKS_PROFILE_NAME"
 # FIXME::REQUIRED: Specifies the name of the Registered Model to use when registering a trained
 #                  model to the MLflow Model Registry.
-  model_name: ""
+  model_name: "ascvd_prediction" # Change me
 
 INGEST_CONFIG:
   # For different options please read: https://github.com/mlflow/recipes-classification-template#ingest-step
   # FIXME::REQUIRED: Specify the format of the training and evaluation dataset. Natively supported
   #                  formats are: parquet, spark_sql, delta.
-  using: ""
+  using: spark_sql
   # FIXME::OPTIONAL: Specify the training and evaluation data location. This is usually a DBFS
   # location ("dbfs:/...") or a SQL table ("SCHEMA.TABLE").
   # location: ""
+  # below would change based on your mount location
+  # run in a separate notebook to get loaction ==> spark.sql("desc formatted vdoa_dev.allergy_test").filter("col_name=='Location'").display()
+  sql: SELECT * FROM delta.`dbfs:/mnt/analytics/silver/vdoa_dev/allergy_test` # Change me
 
 # INGEST_SCORING_CONFIG:
 #   For different options please read: https://github.com/mlflow/recipes-classification-template#batch-scoring

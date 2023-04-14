@@ -24,7 +24,7 @@ positive_class: 1
 #                  metric is used to select best performing models in MLflow UI as well as in
 #                  train and evaluation step.
 #                  Built-in primary metrics are: recall_score, precision_score, f1_score, accuracy_score.
-primary_metric: "f1_score"
+primary_metric: "roc_auc"
 steps:
   # Specifies the dataset to use for model development
   ingest: {{INGEST_CONFIG}}
@@ -53,9 +53,9 @@ steps:
     # FIXME::OPTIONAL: Sets performance thresholds that a trained model must meet in order to be
     #                  eligible for registration to the MLflow Model Registry.
     #
-    # validation_criteria:
-    #   - metric: f1_score
-    #     threshold: 0.7
+    validation_criteria:
+      - metric: roc_auc
+        threshold: 0.7
   register:
     # Indicates whether or not a model that fails to meet performance thresholds should still
     # be registered to the MLflow Model Registry

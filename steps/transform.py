@@ -1,10 +1,3 @@
-"""
-This module defines the following routines used by the 'transform' step of the regression recipe:
-
-- ``transformer_fn``: Defines customizable logic for transforming input data before it is passed
-  to the estimator during model inference.
-"""
-
 def transformer_fn():
     """
     Returns an *unfitted* transformer that defines ``fit()`` and ``transform()`` methods.
@@ -21,17 +14,17 @@ def transformer_fn():
     # get the list of columns names of categorical variables
     cat_selector = make_column_selector(dtype_include=object)
     # get the list of column names of numerical variables
-    num_selector = make_column_selector(dtype_include=np.number)
+    num_selector = make_column_selector(dtype_exclude=object)
 
 
     cat_linear_processor = OneHotEncoder(handle_unknown="ignore")
 
     num_linear_processor = make_pipeline(
-        StandardScaler(), SimpleImputer(strategy="mean", add_indicator=True)
+        StandardScaler(), SimpleImputer(strategy="mean")
     )
 
     linear_preprocessor = make_column_transformer(
-        (num_linear_processor, num_selector), (cat_linear_processor, cat_selector)
+        (num_linear_processor, num_selector), (cat_linear_processor, cat_selector), remainder='passthrough',verbose_feature_names_out = False
     )
 
     return linear_preprocessor
